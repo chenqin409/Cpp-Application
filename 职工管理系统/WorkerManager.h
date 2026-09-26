@@ -18,6 +18,9 @@ public:
 	void save();
 	
 	int m_EmpNum;
+	bool m_IsEmpty; //判断文件是否为空 
+	int GetNum();
+	void InitEmp(); //初始化数据 
 	Worker** m_EmpArr;
 	
 	~WorkerManager();

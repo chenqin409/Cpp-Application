@@ -2,11 +2,87 @@
 
 WorkerManager::WorkerManager()
 {
-	this->m_EmpNum=0;
-	this->m_EmpArr=NULL;
+	ifstream ifs;
+	ifs.open(FILENAME,ios::in);
+	//判断文件是否创建
+	if(!ifs.is_open())
+	{
+		cout<<"文件未创建！"<<endl;
+		this->m_IsEmpty=true;
+		this->m_EmpNum=0;
+		this->m_EmpArr=NULL;
+		ifs.close();
+		return;
+	}
+	//判断文件是否为空
+	char  ch;
+	ifs>>ch;
+	if(ifs.eof())
+	{
+		cout<<"文件为空！"<<endl;
+		this->m_IsEmpty=true;
+		this->m_EmpNum=0;
+		this->m_EmpArr=NULL;
+		ifs.close();
+		return;	
+	} 
+	//文件不为空
+	this->m_EmpNum=this->GetNum(); 
+	cout<<"当前职工人数为："<<this->GetNum()<<endl;
+	this->m_EmpArr = new Worker*[this->m_EmpNum];
+	InitEmp();
+
+
 }
 	
-	
+//读取初始的员工人数	
+int WorkerManager::GetNum()
+{
+	ifstream ifs;
+	ifs.open(FILENAME,ios::in);
+	int id;
+	string name;
+	int depid;
+	int num=0;
+	while(ifs>>id&&ifs>>name&&ifs>>depid)
+	{
+		num++;
+	}
+	ifs.close();
+	return num;
+}
+
+//初始化数据 
+void WorkerManager::InitEmp() 
+{
+	ifstream ifs;
+	ifs.open(FILENAME,ios::in);
+	int id;
+	string name;
+	int depid;
+	int index=0;
+	while(ifs>>id&&ifs>>name&&ifs>>depid)
+	{
+		Worker* worker=NULL;
+		if(depid==1)
+		{
+			worker = new Employee(id,name,depid);
+		}
+		else if (depid==2)
+		{
+			worker = new Manager(id,name,depid);
+		}
+		else if(depid==3)
+		{
+			worker = new Boss(id,name,depid);
+		}
+		this->m_EmpArr[index] = worker;
+		index++;
+	}
+	ifs.close();	
+}
+
+
 void WorkerManager::showmenu()
 {
 	cout << "********************************************" << endl;
@@ -83,6 +159,7 @@ void WorkerManager:: addEmp()
 		 this->m_EmpNum+=addNum;
 		 
 		 cout<<"添加成功！"<<endl;
+		 this->m_IsEmpty=false;
 		 this->save();
 	}
 	else
