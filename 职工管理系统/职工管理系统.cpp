@@ -30,17 +30,18 @@ int main()
 				wm.ModifyEmp();
 				break;
 			case 5: //查找职工 
+				wm.FindEmp();
 				break;
 			case 6: //排序职工 
+				wm.SortEmp();
 				break;
 			case 7: //清空职工 
+				wm.ClearEmp();
 				break;		
 			default:
 				system("cls");  //清屏 
 				break;	
 		}
-			
-		
 	}
 	return 0;
 }

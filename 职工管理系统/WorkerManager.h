@@ -21,6 +21,9 @@ public:
 	int IsExist(int id); //判断职工是否存在
 	void DeleteEmp(); //删除职工 
 	void ModifyEmp(); //修改职工信息 
+	void FindEmp(); //查找职工 
+	void SortEmp(); //排序职工
+	void ClearEmp(); //清空职工 
 	
 	int m_EmpNum;
 	bool m_IsEmpty; //判断文件是否为空 

@@ -309,6 +309,148 @@ void WorkerManager::ModifyEmp()
 	system("cls");
 } 
 
+//查找职工
+void WorkerManager::FindEmp()
+{
+	if(this->m_IsEmpty)
+	{
+		cout<<"文件为空或不存在！"<<endl;
+	}
+	else
+	{
+		cout<<"请选择查找的方式"<<endl;
+		cout<<"1.按编号查找\t"<<"2.按姓名查找"<<endl;
+		int select=0;
+		cin>>select;
+		if(select==1)
+		{
+			cout<<"请输入职工的编号：";
+			int id;
+			cin>>id;
+			int index = this->IsExist(id);
+			if(index==-1)
+			{
+				cout<<"该职工不存在！"<<endl;
+			}
+			else
+			{
+				cout<<"所查找的职工信息如下："<<endl;
+				this->m_EmpArr[index]->showInfo(); 
+			}
+		}	
+		else if(select==2)
+		{
+			cout<<"请输入职工的姓名：";
+			string name;
+			bool is_find = false;
+			cin>>name;
+			for(int i=0;i<this->m_EmpNum;i++)
+			{
+				if(this->m_EmpArr[i]->m_Name==name)
+				{
+					if(!is_find)
+					{
+						cout<<"所查找的职工信息如下："<<endl; 
+					}
+					this->m_EmpArr[i]->showInfo();
+					is_find=true;
+				}
+			}
+			if(!is_find)
+			{
+				cout<<"该职工不存在！"<<endl;
+			}
+		}
+		else
+		{
+			cout<<"输入错误！"<<endl;
+		}
+	}
+	system("pause");
+	system("cls");	
+} 
+
+//排序职工
+void WorkerManager::SortEmp() 
+{
+	if(this->m_IsEmpty)
+	{
+		cout<<"文件为空或不存在！"<<endl;
+		system("pause");
+		system("cls");
+	}	
+	else
+	{
+		cout<<"请选择排序方式："<<endl;
+		cout<<"1.按照职工编号升序排序\t"<<"2.按照职工编号降序排序"<<endl;
+		int select = 0;
+		cin>>select;
+		for(int i=0;i<this->m_EmpNum;i++)
+		{
+			int sub=i;
+			for(int j=i+1;j<this->m_EmpNum;j++)
+			{				
+				if(select==1) //升序排序 
+				{
+					if(this->m_EmpArr[sub]->m_Id > this->m_EmpArr[j]->m_Id) //选最小值 
+					{
+						sub=j;
+					}
+				}
+				else
+				{
+					if(this->m_EmpArr[sub]->m_Id < this->m_EmpArr[j]->m_Id) //选最大值 
+					{
+						sub=j;
+					}
+				}
+			}
+			if (i != sub)
+			{
+				Worker* temp =this->m_EmpArr[sub];
+				this->m_EmpArr[sub]=this->m_EmpArr[i];
+				this->m_EmpArr[i] = temp;
+			}
+		}
+		this->save();
+		cout<<"排序成功，结果如下："<<endl;
+		this->ShowEmp();
+	}
+}
+
+//清空职工
+void WorkerManager::ClearEmp()
+{
+	cout<<"是否要清空所有职工信息？"<<endl;
+	cout<<"1.是\t"<<"2.否"<<endl;
+	int select =0;
+	cin>>select;
+	if(select==1)
+	{
+		ofstream ofs(FILENAME,ios::trunc);
+		ofs.close();
+		if(this->m_EmpArr!=NULL)
+		{
+			for(int i=0;i<this->m_EmpNum;i++)
+			{
+				if(this->m_EmpArr[i]!=NULL)
+				{
+					delete this->m_EmpArr[i];
+				}
+			}
+			delete[] this->m_EmpArr;
+		}
+		cout<<"删除成功！"<<endl; 
+	}	
+	else
+	{
+		cout<<"已取消删除操作"<<endl;
+	}
+	system("pause");
+	system("cls");
+} 
+
+
 //退出系统 
 void WorkerManager::ExitSystem()
 {
@@ -321,6 +463,14 @@ WorkerManager::~WorkerManager()
 {
 	if(this->m_EmpArr!=NULL)
 	{
+		for(int i=0;i<this->m_EmpNum;i++)
+		{
+			if(this->m_EmpArr[i]!=NULL)
+			{
+				delete this->m_EmpArr[i];
+				this->m_EmpArr[i]=NULL;
+			}
+		}
 		delete[] this->m_EmpArr;
 		this->m_EmpArr= NULL;
 	}
