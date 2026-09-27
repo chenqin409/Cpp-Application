@@ -2,6 +2,7 @@
 #include<iostream> //包含输入输出流头文件 
 #include<fstream>
 using namespace std; //使用标准命名空间
+
 #include"Worker.h"
 #include"Employee.h"
 #include"Manager.h"
@@ -16,6 +17,10 @@ public:
 	void addEmp();
 	void ExitSystem();
 	void save();
+	void ShowEmp(); //展示职工信息
+	int IsExist(int id); //判断职工是否存在
+	void DeleteEmp(); //删除职工 
+	void ModifyEmp(); //修改职工信息 
 	
 	int m_EmpNum;
 	bool m_IsEmpty; //判断文件是否为空 

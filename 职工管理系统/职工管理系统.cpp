@@ -21,10 +21,13 @@ int main()
 				wm.addEmp();
 				break;
 			case 2: //显示职工 
+				wm.ShowEmp();
 				break;
 			case 3: //删除职工 
+				wm.DeleteEmp();
 				break;
 			case 4: //修改职工 
+				wm.ModifyEmp();
 				break;
 			case 5: //查找职工 
 				break;

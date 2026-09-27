@@ -9,7 +9,7 @@ Manager::Manager(int Id,string Name,int DeptId)
 	
 void Manager::showInfo()
 {
-	cout<<"职工编号："<<this->m_Id<<"\t职工姓名："<<this->m_Name<<"\t岗位："<<this->getDeptName();
+	cout<<"职工编号："<<this->m_Id<<"\t职工姓名："<<this->m_Name<<"\t岗位："<<this->getDeptName()<<endl;
 }
 
 string Manager::getDeptName()

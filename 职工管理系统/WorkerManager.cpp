@@ -7,7 +7,7 @@ WorkerManager::WorkerManager()
 	//判断文件是否创建
 	if(!ifs.is_open())
 	{
-		cout<<"文件未创建！"<<endl;
+		//cout<<"文件未创建！"<<endl;
 		this->m_IsEmpty=true;
 		this->m_EmpNum=0;
 		this->m_EmpArr=NULL;
@@ -19,7 +19,7 @@ WorkerManager::WorkerManager()
 	ifs>>ch;
 	if(ifs.eof())
 	{
-		cout<<"文件为空！"<<endl;
+		//cout<<"文件为空！"<<endl;
 		this->m_IsEmpty=true;
 		this->m_EmpNum=0;
 		this->m_EmpArr=NULL;
@@ -28,7 +28,7 @@ WorkerManager::WorkerManager()
 	} 
 	//文件不为空
 	this->m_EmpNum=this->GetNum(); 
-	cout<<"当前职工人数为："<<this->GetNum()<<endl;
+	//cout<<"当前职工人数为："<<this->GetNum()<<endl;
 	this->m_EmpArr = new Worker*[this->m_EmpNum];
 	InitEmp();
 
@@ -184,6 +184,132 @@ void WorkerManager::save()
 	ofs.close();
 } 
 
+//展示职工信息
+void WorkerManager::ShowEmp()
+{
+	if(this->m_IsEmpty)
+	{
+		cout<<"文件为空或不存在！"<<endl;
+	}
+	else
+	{
+		for(int i=0;i<this->m_EmpNum;i++)
+		{
+			this->m_EmpArr[i]->showInfo();
+		}
+	}
+	system("pause");
+	system("cls");
+} 
+
+//判断职工是否存在
+int WorkerManager::IsExist(int id)
+{
+	int index=-1;
+	for(int i=0;i<this->m_EmpNum;i++)
+	{
+		if(this->m_EmpArr[i]->m_Id==id)
+		{
+			index=i;
+			break;
+		}
+	}
+	return index;
+} 
+
+//删除职工
+void WorkerManager::DeleteEmp()
+{
+	if(this->m_IsEmpty)
+	{
+		cout<<"文件为空或不存在！"<<endl;	
+	}	
+	else
+	{
+		cout<<"请输入要删除职工的编号：";
+		int id;
+		cin>>id; 
+		int index = this->IsExist(id);
+		if(index==-1)
+		{
+			cout<<"该职工不存在！"<<endl;
+		}
+		else
+		{
+			for(int i=index;i<this->m_EmpNum-1;i++)
+			{
+				this->m_EmpArr[i] = this->m_EmpArr[i+1];
+			}
+			cout<<"删除成功！"<<endl;
+			this->m_EmpNum--;
+			this->save();
+		}
+	}
+	system("pause");
+	system("cls");
+} 
+
+//修改职工信息
+void WorkerManager::ModifyEmp()
+{
+	if(this->m_IsEmpty)	
+	{
+		cout<<"文件为空或不存在！"<<endl;
+	}
+	else
+	{
+		int index=-1;
+		int id;
+		cout<<"请输入要修改的职工的编号：";
+		cin>>id;
+		index = this->IsExist(id);
+		if(index==-1)
+		{
+			cout<<"该职工不存在！"<<endl;
+		}
+		else
+		{
+			int new_id=0;
+			string new_name;
+			int new_depid=0;
+			delete this->m_EmpArr[index];
+			
+			cout<<"查找到该职工，下面对该职工信息进行修改"<<endl;
+			cout<<"请输入职工的编号：";
+			cin>>new_id;
+			cout<<"请输入职工的姓名：";
+			cin>>new_name;
+			cout<<"请选择职工的岗位"<<endl;
+			cout<<"1、普通职工\t"<<"2、经理\t\t"<<"3、老板\t"<<endl;
+			cin>>new_depid;
+			
+			Worker* worker=NULL;
+			
+			switch(new_depid)
+			{
+				case 1:
+					worker = new Employee(new_id,new_name,new_depid);
+					break;
+				case 2:
+					worker = new Employee(new_id,new_name,new_depid);
+					break;
+				case 3:
+					worker = new Employee(new_id,new_name,new_depid);
+					break;
+				default:
+					break;	
+			}
+			
+			this->m_EmpArr[index] = worker;
+			this->save();
+			cout<<"修改成功！"<<endl; 
+		}
+	}
+	system("pause");
+	system("cls");
+} 
+
+//退出系统 
 void WorkerManager::ExitSystem()
 {
 	cout<<"欢迎下次光临！"<<endl;
