@@ -7,6 +7,7 @@
 #include<functional>
 #include<numeric>
 #include<deque>
+#include<fstream> 
 #include "Speaker.h"
 using namespace std;
 
@@ -30,5 +31,7 @@ public:
 	void StartCompetition(); //比赛流程
 	void Shuffle(); //抽签函数 
 	void Contest(); //进行比赛 
+	void ShowScore(); //显示晋级结果
+	void SaveRecord(); //保存记录 
 	
 };

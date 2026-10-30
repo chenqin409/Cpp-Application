@@ -64,17 +64,20 @@ void SpeechManager::StartCompetition()
 	//2、比赛
 	this->Contest();
 	//3、显示晋级结果
-	
+	this->ShowScore();
 	//第二轮比赛
-	
+	this->turn++;
 	//1、抽签
-
+	this->Shuffle();
 	//2、比赛
-	
+	this->Contest();
 	//3、显示获奖结果
-	
+	this->ShowScore();
 	//4、保存结果 
-	 
+	this->SaveRecord();
+	cout<<"比赛结束"<<endl;
+	system("pause");
+	system("cls"); 
 }
 
 void  SpeechManager::Shuffle()//抽签函数 
@@ -117,7 +120,7 @@ void SpeechManager::Contest()
 	}
 	else
 	{
-		player==this->turn2;
+		player=this->turn2;
 	}
 	
 	for(vector<int>::iterator it=player.begin();it!=player.end();it++)
@@ -148,7 +151,7 @@ void SpeechManager::Contest()
 			} 
 			cout<<endl;
 			//筛选晋级人数
-			int temp=1;
+			int temp=0;
 			for(multimap<double,int,greater<double>>::iterator mit = GroupScore.begin();mit!=GroupScore.end();mit++)
 			{
 				if(this->turn==1)
@@ -164,9 +167,37 @@ void SpeechManager::Contest()
 			} 
 			
 			GroupScore.clear();//清空该小组的临时容器 
-		}
-		
-		
+		}	
 	}
+	system("pause");
 }
 
+
+void SpeechManager::ShowScore()
+{
+	cout<<"第"<<this->turn<<"轮晋级结果如下："<<endl;
+	vector<int>temp;
+	if(this->turn==1) temp=this->turn2;
+	else temp=this->vectory;
+	for(vector<int>::iterator it = temp.begin();it!=temp.end();it++)
+	{
+		cout<<"编号："<<*it<<"\t姓名："<<this->m_Speaker[*it].m_Name<<"\t分数"<<this->m_Speaker[*it].m_Score[this->turn-1]<<endl;		
+	}
+	cout<<endl;
+	system("pause");
+	system("cls");
+	this->ShowMenu();
+}
+
+void SpeechManager::SaveRecord()
+{
+	ofstream ofs;
+	ofs.open("speech.csv",ios::out | ios::app);
+	for(vector<int>::iterator it = this->vectory.begin();it!=this->vectory.end();it++)
+	{
+		ofs<<*it<<","<<this->m_Speaker[*it].m_Score[1]<<",";
+	}
+	ofs<<endl;
+	cout<<"记录已保存"<<endl;
+
+}
