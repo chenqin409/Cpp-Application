@@ -8,6 +8,7 @@
 #include<numeric>
 #include<deque>
 #include<fstream> 
+
 #include "Speaker.h"
 using namespace std;
 
@@ -33,5 +34,9 @@ public:
 	void Contest(); //进行比赛 
 	void ShowScore(); //显示晋级结果
 	void SaveRecord(); //保存记录 
-	
+	void LoadRecord(); //加载往届记录
+	bool IsEmpty;  
+	map<int,vector<string>>m_Record; //存放比赛轮次和记录 
+	void ShowRecord(); //展示历史记录 
+	void ClearRecord(); //清空记录 
 };

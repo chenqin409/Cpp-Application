@@ -4,6 +4,7 @@ SpeechManager::SpeechManager()
 {
 	this->Initial();
 	this->CreatSpeaker();
+	this->LoadRecord();
 }
 
 void SpeechManager::ShowMenu()
@@ -76,6 +77,10 @@ void SpeechManager::StartCompetition()
 	//4、保存结果 
 	this->SaveRecord();
 	cout<<"比赛结束"<<endl;
+	//重置容器
+	this->Initial();
+	this->CreatSpeaker();
+	this->LoadRecord(); 
 	system("pause");
 	system("cls"); 
 }
@@ -169,6 +174,7 @@ void SpeechManager::Contest()
 			GroupScore.clear();//清空该小组的临时容器 
 		}	
 	}
+	this->IsEmpty=false;
 	system("pause");
 }
 
@@ -192,12 +198,96 @@ void SpeechManager::ShowScore()
 void SpeechManager::SaveRecord()
 {
 	ofstream ofs;
-	ofs.open("speech.csv",ios::out | ios::app);
+	ofs.open("speech.csv",ios::out | ios::app);  //以追加方式写入 
 	for(vector<int>::iterator it = this->vectory.begin();it!=this->vectory.end();it++)
 	{
 		ofs<<*it<<","<<this->m_Speaker[*it].m_Score[1]<<",";
 	}
 	ofs<<endl;
 	cout<<"记录已保存"<<endl;
+}
 
+void SpeechManager::LoadRecord()
+{
+	ifstream ifs("speech.csv",ios::in);
+	if(!ifs.is_open())
+	{
+		//cout<<"文件不存在！"<<endl;
+		this->IsEmpty=true;
+		ifs.close();
+		return;
+	}
+	char ch;
+	ifs>>ch;
+	if(ifs.eof())
+	{
+		//cout<<"文件为空！"<<endl;
+		this->IsEmpty=true;
+		ifs.close();
+		return;
+	}
+	this->IsEmpty=false;
+	ifs.putback(ch);
+	string data;
+	int index=0;
+	while(ifs>>data)
+	{
+		vector<string>v;
+		int pos=-1; //分隔号的位置 
+		int start=0;
+		while(true)
+		{
+			pos=data.find(",",start);  //找不到时返回-1 
+			if(pos==-1)
+			{
+				break;
+			}
+			string temp=data.substr(start,pos-start);
+			start=pos+1;
+			v.push_back(temp);
+		}
+		m_Record.insert(make_pair(index,v));  //把文件里的历史记录都放到容器里 
+		index++;
+	}
+	
+	ifs.close();
+}
+
+void SpeechManager::ShowRecord()
+{
+	if(this->IsEmpty)
+	{
+		cout<<"文件为空或不存在！"<<endl;
+	}
+	else
+	{
+		for(int i=0;i<m_Record.size();i++)
+		{
+			cout<<"第"<<i+1<<"届\t冠军编号："<<this->m_Record[i][0]<<"\t成绩："<<this->m_Record[i][1]
+			<<"\t亚军编号："<<this->m_Record[i][2]<<"\t成绩："<<this->m_Record[i][3]
+			<<"\t季军编号："<<this->m_Record[i][4]<<"\t成绩："<<this->m_Record[i][5]<<endl; 
+		}
+	}
+	system("pause");
+	system("cls");
+}
+
+void SpeechManager::ClearRecord()
+{
+	cout<<"是否要清空历史记录？"<<endl;
+	cout<<"1、是\t2、否"<<endl;
+	int temp;
+	cin>>temp;
+	if(temp==1)
+	{
+		ofstream ofs("speech.csv",ios::trunc);
+		ofs.close();
+		//重置容器
+		this->Initial();
+		this->CreatSpeaker();
+		this->LoadRecord(); 
+		cout<<"清空成功！"<<endl; 
+	} 
+	system("pause");
+	system("cls");
 }

@@ -1,10 +1,10 @@
 #include <iostream>
 using namespace std;
 #include "SpeechManager.h"
-
+#include<ctime>
 int main(int argc, char** argv) {
 	SpeechManager sm;
-
+	srand((unsigned int)time(NULL));
 	
 	while(true)
 	{
@@ -19,8 +19,10 @@ int main(int argc, char** argv) {
 				sm.StartCompetition();
 				break;
 			case 2:
+				sm.ShowRecord();
 				break;
 			case 3:
+				sm.ClearRecord();
 				break;
 			case 0:
 				sm.ExitSystem();
